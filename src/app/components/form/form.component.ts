@@ -32,7 +32,7 @@ export class FormComponent implements OnInit {
         password: ['', [Validators.required, FormValidators.passwordValidator]],
         confirmPassword: ['', [Validators.required]],
         phoneNumber: ['', [Validators.pattern(/^\d{10}$/)]],
-        skills: this.fb.array([]), // FormArray for skills
+        skills: this.fb.array([]),
         referralCode: [''],
         hasReferralCode: [false],
       },
