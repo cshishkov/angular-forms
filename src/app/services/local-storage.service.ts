@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RegistrationForm } from '../types/registration-form';
 
 @Injectable({
   providedIn: 'root',
@@ -6,11 +7,11 @@ import { Injectable } from '@angular/core';
 export class LocalStorageService {
   constructor() {}
 
-  saveData(key: string, data: any) {
+  saveData(key: string, data: Partial<RegistrationForm>) {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
-  loadData(key: string): any {
+  loadData(key: string): Partial<RegistrationForm> {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   }
