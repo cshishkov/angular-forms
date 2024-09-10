@@ -1,0 +1,13 @@
+<div [formGroup]="formGroup">
+  <div class="mb-3">
+    <label [for]="controlName" class="form-label">{{ label }}</label>
+    <input
+      [type]="type"
+      [id]="controlName"
+      class="form-control"
+      [formControlName]="controlName"
+      [placeholder]="placeholder"
+    />
+    <app-error-message *ngIf="control" [control]="control"></app-error-message>
+  </div>
+</div>
