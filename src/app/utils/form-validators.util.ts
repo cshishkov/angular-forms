@@ -1,8 +1,7 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class FormValidators {
-  static predefinedUsernames = ['johnDoe', 'janeDoe'];
-  static predefinedReferralCodes = ['ABC123', 'XYZ789'];
+  static predefinedUsernames = ['user1', 'user2', 'user3'];
 
   static usernameValidator(control: AbstractControl): ValidationErrors | null {
     if (FormValidators.predefinedUsernames.includes(control.value)) {
@@ -27,13 +26,13 @@ export class FormValidators {
     return null;
   }
 
-  static referralCodeValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
-    if (!FormValidators.predefinedReferralCodes.includes(control.value)) {
+  static referralCodeValidator(control: AbstractControl): ValidationErrors | null {
+    const codeRegex = /^[A-Z]{3}\d{3}$/;
+    if (!codeRegex.test(control.value)) {
       return { invalidReferralCode: true };
     }
-    return null;
+
+    return null
   }
 
   static matchPasswords(group: AbstractControl): ValidationErrors | null {

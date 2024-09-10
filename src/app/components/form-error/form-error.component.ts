@@ -8,11 +8,9 @@ import { AbstractControl } from '@angular/forms';
 })
 export class FormErrorComponent {
   @Input() control!: AbstractControl | null;
-  @Input() errorMessages!: { [key: string]: string };
+  @Input() errorMessages!: Record<string, string>
 
   get errorKeys(): string[] {
-    return this.control && this.control.errors
-      ? Object.keys(this.control.errors)
-      : [];
+    return this.control && this.control.errors ? Object.keys(this.control.errors) : [];
   }
 }
