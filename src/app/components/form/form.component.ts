@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RegistrationFormModel, SkillModel } from 'src/app/types/registration-form';
-import { FormValidators } from 'src/app/utils/form-validators.util';
+import { emailValidator, MustMatch, passwordValidator, referralCodeValidator, usernameValidator } from 'src/app/utils/form-validators.util';
 
 @Component({
   selector: 'app-form',
@@ -12,44 +12,46 @@ import { FormValidators } from 'src/app/utils/form-validators.util';
 export class FormComponent implements OnInit {
 
   registrationForm!: FormGroup;
-  formSubmittedSuccessfully?: boolean;
+  submitted?: boolean;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private localStorageService: LocalStorageService
+    private fb: FormBuilder,
+    private localStorageService: LocalStorageService,
   ) {
   }
 
   ngOnInit(): void {
-    this.registrationForm = this.formBuilder.group(
+    this.registrationForm = this.fb.group(
       {
         username: ['', [
           Validators.required,
-          FormValidators.usernameValidator
+          usernameValidator
         ]],
         email: ['', [
           Validators.required,
-          Validators.email,
-          FormValidators.emailValidator,
-        ],],
+          emailValidator
+        ]],
         password: ['', [
           Validators.required,
-          FormValidators.passwordValidator
+          passwordValidator
+
         ]],
         confirmPassword: ['', [
-          Validators.required
+          Validators.required,
         ]],
         phoneNumber: ['', [
           Validators.pattern(/^\d{10}$/)
         ]],
-        skills: this.formBuilder.array([]),
+        skills: this.fb.array([]),
         referralCode: [{
           value: '',
           disabled: true
         }],
         hasReferralCode: [false],
       },
-      { validators: FormValidators.matchPasswords }
+      {
+        validators: MustMatch('password', 'confirmPassword')
+      }
     );
 
     this.loadFormData();
@@ -63,7 +65,7 @@ export class FormComponent implements OnInit {
       referralCodeControl?.enable();
       referralCodeControl?.setValidators([
         Validators.required,
-        FormValidators.referralCodeValidator
+        referralCodeValidator
       ]);
     } else {
       referralCodeControl?.disable();
@@ -80,7 +82,7 @@ export class FormComponent implements OnInit {
   }
 
   addSkill() {
-    const skillGroup = this.formBuilder.group({
+    const skillGroup = this.fb.group({
       skill: ['']
     });
 
@@ -100,7 +102,7 @@ export class FormComponent implements OnInit {
 
       if (savedData.skills && savedData.skills.length) {
         savedData.skills.forEach((skill: SkillModel) => {
-          const skillGroup = this.formBuilder.group({
+          const skillGroup = this.fb.group({
             skill: [skill.skill || '']
           });
           this.skills.push(skillGroup);
@@ -120,9 +122,14 @@ export class FormComponent implements OnInit {
       const formValue: Partial<RegistrationFormModel> = this.registrationForm.value;
       console.log(formValue);
       this.localStorageService.saveData('registrationForm', formValue);
-      this.formSubmittedSuccessfully = true;
+      this.submitted = true;
     } else {
-      this.formSubmittedSuccessfully = false;
+      this.submitted = false;
     }
+  }
+
+  onResetClick() {
+    this.submitted = false;
+    this.registrationForm.reset();
   }
 }

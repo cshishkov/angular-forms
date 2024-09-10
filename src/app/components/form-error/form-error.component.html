@@ -1,8 +1,0 @@
-<div
-  *ngIf="control && control.invalid && (control.dirty || control.touched)"
-  class="text-danger"
->
-  <small *ngFor="let errorKey of errorKeys">
-    {{ errorMessages[errorKey] }}
-  </small>
-</div>

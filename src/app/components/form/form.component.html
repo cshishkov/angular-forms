@@ -1,52 +1,71 @@
 <div class="mt-4 wrapper">
-  <h2 class="text-center">Registration form</h2>
+  <h2 class="text-center">Form</h2>
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="card p-3">
     <div class="row g-0">
 
       <div class="mb-3 col-12">
         <label for="username" class="form-label">Username</label>
         <input type="text" id="username" class="form-control" formControlName="username" />
-        <app-form-error [control]="registrationForm.get('username')" [errorMessages]="{
-          required: 'Username is required.',
-          usernameTaken: 'Username is already taken.'}">
-        </app-form-error>
+        <div *ngIf="registrationForm.get('username')?.touched && registrationForm.get('username')?.invalid">
+          <div *ngIf="registrationForm.get('username')?.errors?.['required']">
+            <small class="text-danger">Username is required.</small>
+          </div>
+          <div *ngIf="registrationForm.get('username')?.errors?.['usernameTaken']">
+            <small class="text-danger">Username is taken.</small>
+          </div>
+        </div>
       </div>
 
       <div class="mb-3 col-12">
         <label for="email" class="form-label">Email</label>
         <input type="email" id="email" class="form-control" formControlName="email" />
-        <app-form-error [control]="registrationForm.get('email')" [errorMessages]="{
-          required: 'Email is required.',
-          invalidEmail: 'Invalid email format.'}">
-        </app-form-error>
+        <div *ngIf="registrationForm.get('email')?.touched && registrationForm.get('email')?.invalid">
+          <div *ngIf="registrationForm.get('email')?.errors?.['required']">
+            <small class="text-danger">Email is required</small>
+          </div>
+          <div *ngIf="registrationForm.get('email')?.errors?.['invalidEmail']">
+            <small class="text-danger">Invalid email</small>
+          </div>
+        </div>
       </div>
 
       <div class="mb-3 col-12">
         <label for="password" class="form-label">Password</label>
         <input type="password" id="password" class="form-control" formControlName="password" />
-        <app-form-error [control]="registrationForm.get('password')"
-          [errorMessages]="{
-          required: 'Password is required.',
-          weakPassword:
-            'Password must be at least 8 characters long and include one uppercase letter, one number, and one special character.'}">
-        </app-form-error>
+        <div *ngIf="registrationForm.get('password')?.touched && registrationForm.get('password')?.invalid">
+          <div *ngIf="registrationForm.get('password')?.errors?.['required']">
+            <small class="text-danger">Password is required</small>
+          </div>
+          <div *ngIf="registrationForm.get('password')?.errors?.['weakPassword']">
+            <small class="text-danger">Weak password</small>
+          </div>
+        </div>
       </div>
 
       <div class="mb-3 col-12">
         <label for="confirmPassword" class="form-label">Confirm Password</label>
         <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword" />
-        <app-form-error [control]="registrationForm.get('confirmPassword')" [errorMessages]="{
-          required: 'Confirm Password is required.',
-          passwordsMismatch: 'Passwords do not match.'}">
-        </app-form-error>
+        <div
+          *ngIf="registrationForm.get('confirmPassword')?.touched && registrationForm.get('confirmPassword')?.invalid">
+          <div *ngIf="registrationForm.get('confirmPassword')?.errors?.['required']">
+            <small class="text-danger">Confirm password is required.</small>
+          </div>
+          <div *ngIf="registrationForm.get('confirmPassword')?.errors?.['mustMatch']">
+            <small class="text-danger">Passwords do not match.</small>
+          </div>
+        </div>
+
+
       </div>
 
       <div class="mb-3 col-12">
         <label for="phoneNumber" class="form-label">Phone Number</label>
         <input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber" />
-        <app-form-error [control]="registrationForm.get('phoneNumber')"
-          [errorMessages]="{ pattern: 'Phone number must be 10 digits.' }">
-        </app-form-error>
+        <div *ngIf="registrationForm.get('phoneNumber')?.touched && registrationForm.get('phoneNumber')?.invalid">
+          <div *ngIf="registrationForm.get('phoneNumber')?.errors?.['pattern']">
+            <small class="text-danger"> Phone number must be 10 digits. </small>
+          </div>
+        </div>
       </div>
 
       <div class="mb-3 col-12" formArrayName="skills">
@@ -56,7 +75,7 @@
             Remove
           </button>
         </div>
-        <button type="button" class="btn btn-secondary" (click)="addSkill()">
+        <button type="button" class="btn btn-secondary mt-2" (click)="addSkill()">
           Add Skill
         </button>
       </div>
@@ -69,16 +88,21 @@
       <div class="mb-3 col-12" *ngIf="registrationForm.get('referralCode')?.enabled">
         <label for="referralCode" class="form-label">Referral Code</label>
         <input type="text" id="referralCode" class="form-control" formControlName="referralCode" />
-        <app-form-error [control]="registrationForm.get('referralCode')" [errorMessages]="{
-          required: 'Referral code is required.',
-          invalidReferralCode: 'Invalid referral code.'}">
-        </app-form-error>
+        <div *ngIf="registrationForm.get('referralCode')?.touched && registrationForm.get('referralCode')?.invalid"
+          class="text-danger">
+          <div *ngIf="registrationForm.get('referralCode')?.errors?.['invalidReferralCode']">
+            Invalid referral code
+          </div>
+        </div>
       </div>
-      <button type="submit" class="btn btn-primary col-12">
+      <button type="submit" class="btn btn-primary col-12" [disabled]="!registrationForm.valid">
         Submit
       </button>
+      <button class="btn btn-secondary col-12 mt-3" (click)="onResetClick()">
+        Cancel
+      </button>
 
-      <div *ngIf="formSubmittedSuccessfully" class="alert alert-success text-center col-12 mt-4">
+      <div *ngIf="submitted" class="alert alert-success text-center col-12 mt-4">
         Form submitted successfully!
       </div>
 
