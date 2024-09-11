@@ -55,9 +55,7 @@
           </div>
         </div>
 
-
       </div>
-
       <div class="mb-3 col-12">
         <label for="phoneNumber" class="form-label">Phone Number</label>
         <input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber" />
@@ -97,9 +95,6 @@
       </div>
       <button type="submit" class="btn btn-primary col-12" [disabled]="!registrationForm.valid">
         Submit
-      </button>
-      <button class="btn btn-secondary col-12 mt-3" (click)="onResetClick()">
-        Cancel
       </button>
 
       <div *ngIf="submitted" class="alert alert-success text-center col-12 mt-4">

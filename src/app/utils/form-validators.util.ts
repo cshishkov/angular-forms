@@ -37,7 +37,7 @@ export function referralCodeValidator(control: AbstractControl): ValidationError
   }
 }
 
-export function MustMatch(controlName: string, matchingControlName: string) {
+export function match(controlName: string, matchingControlName: string) {
   return (formGroup: FormGroup) => {
     const control = formGroup.get(controlName);
     const matchingControl = formGroup.get(matchingControlName);

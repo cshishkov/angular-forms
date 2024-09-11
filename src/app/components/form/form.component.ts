@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RegistrationFormModel, SkillModel } from 'src/app/types/registration-form';
-import { emailValidator, MustMatch, passwordValidator, referralCodeValidator, usernameValidator } from 'src/app/utils/form-validators.util';
+import { emailValidator, match, passwordValidator, referralCodeValidator, usernameValidator } from 'src/app/utils/form-validators.util';
 
 @Component({
   selector: 'app-form',
@@ -34,10 +34,9 @@ export class FormComponent implements OnInit {
         password: ['', [
           Validators.required,
           passwordValidator
-
         ]],
         confirmPassword: ['', [
-          Validators.required,
+          Validators.required
         ]],
         phoneNumber: ['', [
           Validators.pattern(/^\d{10}$/)
@@ -50,9 +49,10 @@ export class FormComponent implements OnInit {
         hasReferralCode: [false],
       },
       {
-        validators: MustMatch('password', 'confirmPassword')
+        validators: [match('password', 'confirmPassword')]
       }
     );
+
 
     this.loadFormData();
   }
@@ -95,25 +95,28 @@ export class FormComponent implements OnInit {
 
   loadFormData() {
     const savedData = this.localStorageService.loadData('registrationForm');
-    if (savedData) {
-      this.registrationForm.patchValue(savedData);
 
-      this.skills.clear();
+    if (!savedData) {
+      return;
+    }
 
-      if (savedData.skills && savedData.skills.length) {
-        savedData.skills.forEach((skill: SkillModel) => {
-          const skillGroup = this.fb.group({
-            skill: [skill.skill || '']
-          });
-          this.skills.push(skillGroup);
+    this.registrationForm.patchValue(savedData);
+
+    this.skills.clear();
+
+    if (savedData.skills && savedData.skills.length) {
+      savedData.skills.forEach((skill: SkillModel) => {
+        const skillGroup = this.fb.group({
+          skill: [skill.skill || '']
         });
-      }
+        this.skills.push(skillGroup);
+      });
+    }
 
-      if (savedData.hasReferralCode) {
-        this.registrationForm.get('referralCode')?.enable();
-      } else {
-        this.registrationForm.get('referralCode')?.disable();
-      }
+    if (savedData.hasReferralCode) {
+      this.registrationForm.get('referralCode')?.enable();
+    } else {
+      this.registrationForm.get('referralCode')?.disable();
     }
   }
 
@@ -126,10 +129,5 @@ export class FormComponent implements OnInit {
     } else {
       this.submitted = false;
     }
-  }
-
-  onResetClick() {
-    this.submitted = false;
-    this.registrationForm.reset();
   }
 }
