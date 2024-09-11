@@ -37,7 +37,9 @@
             <small class="text-danger">Password is required</small>
           </div>
           <div *ngIf="registrationForm.get('password')?.errors?.['weakPassword']">
-            <small class="text-danger">Weak password</small>
+            <small class="text-danger"> Password must be at least 8 characters long, include at least one uppercase
+              letter, one number, and one special character.
+            </small>
           </div>
         </div>
       </div>
