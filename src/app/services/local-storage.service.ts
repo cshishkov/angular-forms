@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { RegistrationFormModel } from '../types/registration-form';
 
 @Injectable({
@@ -7,7 +8,7 @@ import { RegistrationFormModel } from '../types/registration-form';
 export class LocalStorageService {
   constructor() { }
 
-  saveData(key: string, data: Partial<RegistrationFormModel>) {
+  saveData(key: string, data: Partial<RegistrationFormModel>): void {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
@@ -16,7 +17,7 @@ export class LocalStorageService {
     return data ? JSON.parse(data) : null;
   }
 
-  removeData(key: string) {
+  removeData(key: string): void {
     localStorage.removeItem(key);
   }
 }

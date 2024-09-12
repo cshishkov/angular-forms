@@ -1,9 +1,9 @@
 import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 
-const names = ['user1', 'user2', 'user3'];
+import { Constants } from './constants.util';
 
 export function usernameValidator(control: AbstractControl): ValidationErrors | null {
-  if (names.includes(control.value)) {
+  if (Constants.PREDEFINED_NAMES.includes(control.value)) {
     return { usernameTaken: true };
   } else {
     return null;
@@ -11,8 +11,7 @@ export function usernameValidator(control: AbstractControl): ValidationErrors | 
 }
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  if (!emailRegex.test(control.value)) {
+  if (Constants.EMAIL_REGEX.test(control.value)) {
     return { invalidEmail: true };
   } else {
     return null;
@@ -20,8 +19,7 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
 }
 
 export function passwordValidator(control: AbstractControl): ValidationErrors | null {
-  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-  if (!passwordRegex.test(control.value)) {
+  if (Constants.PASSWORD_REGEX.test(control.value)) {
     return { weakPassword: true };
   } else {
     return null;
@@ -29,15 +27,14 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
 }
 
 export function referralCodeValidator(control: AbstractControl): ValidationErrors | null {
-  const codeRegex = /^[A-Z]{3}\d{3}$/;
-  if (!codeRegex.test(control.value)) {
+  if (Constants.REFERRAL_CODE_REGEX.test(control.value)) {
     return { invalidReferralCode: true };
   } else {
     return null;
   }
 }
 
-export function match(controlName: string, matchingControlName: string) {
+export function match(controlName: string, matchingControlName: string): (formGroup: FormGroup) => null {
   return (formGroup: FormGroup) => {
     const control = formGroup.get(controlName);
     const matchingControl = formGroup.get(matchingControlName);

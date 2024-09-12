@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControlOptions, AbstractControl } from '@angular/forms';
+
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RegistrationFormModel, SkillModel } from 'src/app/types/registration-form';
 import { emailValidator, match, passwordValidator, referralCodeValidator, usernameValidator } from 'src/app/utils/form-validators.util';
@@ -14,11 +15,37 @@ export class FormComponent implements OnInit {
   registrationForm!: FormGroup;
   submitted?: boolean;
 
+  get usernameFormControl(): AbstractControl | null {
+    return this.registrationForm.get('username');
+  }
+
+  get emailFormControl(): AbstractControl | null {
+    return this.registrationForm.get("email");
+  }
+
+  get passwordFormControl(): AbstractControl | null {
+    return this.registrationForm.get("password")
+  }
+  get confirmPasswordFormControl(): AbstractControl | null {
+    return this.registrationForm.get("confirmPassword")
+  }
+
+  get phoneNumberFormControl(): AbstractControl | null {
+    return this.registrationForm.get("phoneNumber")
+  }
+
+  get skills(): FormArray {
+    return this.registrationForm.get('skills') as FormArray;
+  }
+
+  get referralCodeFormControl(): AbstractControl | null {
+    return this.registrationForm.get("referralCode");
+  }
+
   constructor(
     private fb: FormBuilder,
     private localStorageService: LocalStorageService,
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     this.registrationForm = this.fb.group(
@@ -49,39 +76,32 @@ export class FormComponent implements OnInit {
         hasReferralCode: [false],
       },
       {
-        validators: [match('password', 'confirmPassword')]
-      }
+        validators: match('password', 'confirmPassword')
+      } as AbstractControlOptions
     );
-
 
     this.loadFormData();
   }
 
-  toggleReferralCode($event: MouseEvent) {
+  toggleReferralCode($event: MouseEvent): void {
     const checkbox = $event.target as HTMLInputElement;
-    const referralCodeControl = this.registrationForm.get('referralCode');
 
     if (checkbox.checked) {
-      referralCodeControl?.enable();
-      referralCodeControl?.setValidators([
+      this.referralCodeFormControl?.enable();
+      this.referralCodeFormControl?.setValidators([
         Validators.required,
         referralCodeValidator
       ]);
     } else {
-      referralCodeControl?.disable();
-      referralCodeControl?.reset();
-      referralCodeControl?.clearValidators();
+      this.referralCodeFormControl?.disable();
+      this.referralCodeFormControl?.reset();
+      this.referralCodeFormControl?.clearValidators();
     }
 
-    referralCodeControl?.updateValueAndValidity();
+    this.referralCodeFormControl?.updateValueAndValidity();
   }
 
-
-  get skills(): FormArray {
-    return this.registrationForm.get('skills') as FormArray;
-  }
-
-  addSkill() {
+  addSkill(): void {
     const skillGroup = this.fb.group({
       skill: ['']
     });
@@ -89,11 +109,11 @@ export class FormComponent implements OnInit {
     this.skills.push(skillGroup);
   }
 
-  removeSkill(index: number) {
+  removeSkill(index: number): void {
     this.skills.removeAt(index);
   }
 
-  loadFormData() {
+  loadFormData(): void {
     const savedData = this.localStorageService.loadData('registrationForm');
 
     if (!savedData) {
@@ -105,7 +125,7 @@ export class FormComponent implements OnInit {
     this.skills.clear();
 
     if (savedData.skills && savedData.skills.length) {
-      savedData.skills.forEach((skill: SkillModel) => {
+      savedData.skills.forEach((skill: SkillModel): void => {
         const skillGroup = this.fb.group({
           skill: [skill.skill || '']
         });
@@ -114,13 +134,13 @@ export class FormComponent implements OnInit {
     }
 
     if (savedData.hasReferralCode) {
-      this.registrationForm.get('referralCode')?.enable();
+      this.referralCodeFormControl?.enable();
     } else {
-      this.registrationForm.get('referralCode')?.disable();
+      this.referralCodeFormControl?.disable();
     }
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.registrationForm.valid) {
       const formValue: Partial<RegistrationFormModel> = this.registrationForm.value;
       console.log(formValue);
