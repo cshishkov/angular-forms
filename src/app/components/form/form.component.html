@@ -7,10 +7,10 @@
         <label for="username" class="form-label">Username</label>
         <input type="text" id="username" class="form-control" formControlName="username" />
         <div *ngIf="usernameFormControl?.touched && usernameFormControl?.invalid && usernameFormControl?.dirty">
-          <div *ngIf="usernameFormControl?.errors?.['required']">
+          <div *ngIf="usernameFormControl?.errors?.[errorNames.Required]">
             <small class="text-danger">Username is required</small>
           </div>
-          <div *ngIf="usernameFormControl?.errors?.['usernameTaken']">
+          <div *ngIf="usernameFormControl?.errors?.[errorNames.UsernameTaken]">
             <small class="text-danger">Username is taken</small>
           </div>
         </div>
@@ -20,10 +20,10 @@
         <label for="email" class="form-label">Email</label>
         <input type="email" id="email" class="form-control" formControlName="email" />
         <div *ngIf="emailFormControl?.touched && emailFormControl?.invalid && emailFormControl?.dirty">
-          <div *ngIf="emailFormControl?.errors?.['required']">
+          <div *ngIf="emailFormControl?.errors?.[errorNames.Required]">
             <small class="text-danger">Email is required</small>
           </div>
-          <div *ngIf="emailFormControl?.errors?.['invalidEmail']">
+          <div *ngIf="emailFormControl?.errors?.[errorNames.InvalidEmail]">
             <small class="text-danger">Invalid email</small>
           </div>
         </div>
@@ -32,11 +32,11 @@
       <div class="mb-3 col-12">
         <label for="password" class="form-label">Password</label>
         <input type="password" id="password" class="form-control" formControlName="password" />
-        <div *ngIf="passwordFormControl?.touched && passwordFormControl?.invalid&& passwordFormControl?.dirty">
-          <div *ngIf="passwordFormControl?.errors?.['required']">
+        <div *ngIf="passwordFormControl?.touched && passwordFormControl?.invalid && passwordFormControl?.dirty">
+          <div *ngIf="passwordFormControl?.errors?.[errorNames.Required]">
             <small class="text-danger">Password is required</small>
           </div>
-          <div *ngIf="passwordFormControl?.errors?.['weakPassword']">
+          <div *ngIf="passwordFormControl?.errors?.[errorNames.WeakPassword]">
             <small class="text-danger"> Password must be at least 8 characters long, include at least one uppercase
               letter, one number, and one special character.
             </small>
@@ -49,10 +49,10 @@
         <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword" />
         <div
           *ngIf="confirmPasswordFormControl?.touched && confirmPasswordFormControl?.invalid && confirmPasswordFormControl?.dirty">
-          <div *ngIf="confirmPasswordFormControl?.errors?.['required']">
+          <div *ngIf="confirmPasswordFormControl?.errors?.[errorNames.Required]">
             <small class="text-danger">Confirm password is required</small>
           </div>
-          <div *ngIf="confirmPasswordFormControl?.errors?.['mustMatch']">
+          <div *ngIf="confirmPasswordFormControl?.errors?.[errorNames.MustMatch]">
             <small class="text-danger">Passwords do not match</small>
           </div>
         </div>
@@ -63,7 +63,7 @@
         <input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber" />
         <div
           *ngIf="phoneNumberFormControl?.touched && phoneNumberFormControl?.invalid && phoneNumberFormControl?.dirty">
-          <div *ngIf="phoneNumberFormControl?.errors?.['pattern']">
+          <div *ngIf="phoneNumberFormControl?.errors?.[errorNames.Pattern]">
             <small class="text-danger">Phone number must be 10 digits</small>
           </div>
         </div>
@@ -92,7 +92,7 @@
         <div
           *ngIf="referralCodeFormControl?.touched && referralCodeFormControl?.invalid && referralCodeFormControl?.dirty"
           class="text-danger">
-          <div *ngIf="referralCodeFormControl?.errors?.['invalidReferralCode']">
+          <div *ngIf="referralCodeFormControl?.errors?.[errorNames.InvalidReferralCode]">
             Invalid referral code
           </div>
         </div>

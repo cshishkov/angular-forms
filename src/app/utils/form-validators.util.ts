@@ -1,6 +1,7 @@
 import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 
 import { Constants } from './constants.util';
+import { ErrorNames } from './errorNames.util';
 
 export function usernameValidator(control: AbstractControl): ValidationErrors | null {
   if (Constants.PREDEFINED_NAMES.includes(control.value)) {
@@ -43,7 +44,7 @@ export function match(controlName: string, matchingControlName: string): (formGr
       return null;
     }
 
-    if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
+    if (matchingControl.errors && !matchingControl.errors[ErrorNames.MustMatch]) {
       return null;
     }
 

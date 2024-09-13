@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, FormArray, AbstractControlOptions, 
 
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RegistrationFormModel, SkillModel } from 'src/app/types/registration-form';
+import { ControlNames } from 'src/app/utils/controlNames.util';
+import { ErrorNames } from 'src/app/utils/errorNames.util';
 import { emailValidator, match, passwordValidator, referralCodeValidator, usernameValidator } from 'src/app/utils/form-validators.util';
 
 @Component({
@@ -14,38 +16,42 @@ export class FormComponent implements OnInit {
 
   registrationForm!: FormGroup;
   submitted?: boolean;
+  errorNames: typeof ErrorNames;
 
-  get usernameFormControl(): AbstractControl | null {
-    return this.registrationForm.get('username');
+  get usernameFormControl(): AbstractControl {
+    return this.registrationForm.get(ControlNames.Username) as AbstractControl;
   }
 
-  get emailFormControl(): AbstractControl | null {
-    return this.registrationForm.get("email");
+  get emailFormControl(): AbstractControl {
+    return this.registrationForm.get(ControlNames.Email
+    ) as AbstractControl;
   }
 
-  get passwordFormControl(): AbstractControl | null {
-    return this.registrationForm.get("password")
+  get passwordFormControl(): AbstractControl {
+    return this.registrationForm.get(ControlNames.Password) as AbstractControl;
   }
-  get confirmPasswordFormControl(): AbstractControl | null {
-    return this.registrationForm.get("confirmPassword")
+  get confirmPasswordFormControl(): AbstractControl {
+    return this.registrationForm.get(ControlNames.ConfirmPassword) as AbstractControl;
   }
 
-  get phoneNumberFormControl(): AbstractControl | null {
-    return this.registrationForm.get("phoneNumber")
+  get phoneNumberFormControl(): AbstractControl {
+    return this.registrationForm.get(ControlNames.PhoneNumber) as AbstractControl;
   }
 
   get skills(): FormArray {
-    return this.registrationForm.get('skills') as FormArray;
+    return this.registrationForm.get(ControlNames.Skills) as FormArray;
   }
 
-  get referralCodeFormControl(): AbstractControl | null {
-    return this.registrationForm.get("referralCode");
+  get referralCodeFormControl(): AbstractControl {
+    return this.registrationForm.get(ControlNames.ReferralCode) as AbstractControl
   }
 
   constructor(
     private fb: FormBuilder,
     private localStorageService: LocalStorageService,
-  ) { }
+  ) {
+    this.errorNames = ErrorNames
+  }
 
   ngOnInit(): void {
     this.registrationForm = this.fb.group(
@@ -76,7 +82,7 @@ export class FormComponent implements OnInit {
         hasReferralCode: [false],
       },
       {
-        validators: match('password', 'confirmPassword')
+        validators: match(ControlNames.Password, ControlNames.ConfirmPassword)
       } as AbstractControlOptions
     );
 
